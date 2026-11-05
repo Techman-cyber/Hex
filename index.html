@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="HEX OS — a Linux-based desktop built for makers, developers and curious minds.">
+  <title>HEX OS — Your system. Your space.</title>
+  <link rel="icon" type="image/png" href="assets/hex-mark.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}
+  </script>
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="HEX OS home">
+      <span class="brand-icon"><img src="assets/hex-mark.png" alt=""></span>
+      <span>HEX<span class="brand-dim">/</span>OS</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#features">Features</a><a href="#desktop">The desktop</a><a href="#install">Get started</a>
+    </nav>
+    <a class="nav-cta" href="#download">Download <span>↗</span></a>
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> AN OPEN LINUX PROJECT <span class="eyebrow-line"></span> ARCH BASED</div>
+        <h1>Your system.<br><span class="gradient-text">Your space.</span></h1>
+        <p class="hero-lede">A desktop built on Linux, shaped for people who build things. Clean workflows, useful tools, and room to make it yours.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#download">Explore HEX OS <span>↗</span></a>
+          <a class="button button-ghost" href="https://github.com/Techman-cyber/Hex" target="_blank" rel="noreferrer">View source <span>⌘</span></a>
+        </div>
+        <div class="hero-meta"><span><i></i> FREE & OPEN SOURCE</span><span>LINUX · WAYLAND · HYPRLAND</span></div>
+      </div>
+      <div class="hero-visual">
+        <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+        <div id="scene" aria-label="Interactive 3D HEX emblem"></div>
+        <div class="scene-tag tag-top"><span class="tag-dot"></span> HEX CORE <small>01 / SYSTEM</small></div>
+        <div class="scene-tag tag-bottom">BUILT TO EXPLORE <span>✳</span></div>
+        <div class="float-card card-a"><span class="card-label">ENVIRONMENT</span><b>WAYLAND</b><small>HYPRLAND SESSION</small></div>
+        <div class="float-card card-b"><span class="card-label">MEMORY</span><b>zRAM <em>↗</em></b><small>COMPRESSED SWAP</small></div>
+      </div>
+      <div class="hero-bottom"><span>SCROLL TO EXPLORE</span><span class="scroll-line"></span><span>01 — 04</span></div>
+    </section>
+
+    <section class="ticker" aria-label="Technology stack"><div class="ticker-track">
+      <span>LINUX KERNEL</span><b>✳</b><span>ARCH BASED</span><b>✳</b><span>WAYLAND</span><b>✳</b><span>HYPRLAND</span><b>✳</b><span>OPEN SOURCE</span><b>✳</b><span>LINUX KERNEL</span><b>✳</b><span>ARCH BASED</span><b>✳</b><span>WAYLAND</span><b>✳</b><span>HYPRLAND</span><b>✳</b><span>OPEN SOURCE</span><b>✳</b>
+    </div></section>
+
+    <section class="intro section-pad" id="features">
+      <div class="section-kicker">01 / THE PHILOSOPHY</div>
+      <div class="intro-layout">
+        <h2>Less friction.<br><span class="muted">More flow.</span></h2>
+        <div class="intro-text"><p>HEX OS brings a focused desktop experience to an Arch-based system. It is designed to stay out of your way while keeping powerful tools close.</p><span class="mono-note">A DIFFERENT KIND OF DAILY DRIVER.</span></div>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card feature-large">
+          <div class="feature-icon icon-window"><span></span><span></span><span></span><span></span></div>
+          <div class="feature-number">01</div><h3>A desktop with intention.</h3><p>Hyprland and Wayland create a modern foundation for a keyboard-friendly, customizable workspace.</p><div class="feature-foot">WAYLAND / HYPRLAND <span>↗</span></div>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon icon-pulse">⌁</div><div class="feature-number">02</div><h3>Keep things moving.</h3><p>Compressed RAM swap and tuned system settings help make the most of available resources.</p><div class="feature-foot">zRAM / PERFORMANCE <span>↗</span></div>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon icon-shield">◇</div><div class="feature-number">03</div><h3>Privacy by design.</h3><p>The project is configured without telemetry and includes firewall and AppArmor protections.</p><div class="feature-foot">NO TELEMETRY / APPARMOR <span>↗</span></div>
+        </article>
+        <article class="feature-card">
+          <div class="feature-icon icon-terminal">&gt;_</div><div class="feature-number">04</div><h3>Made for makers.</h3><p>A terminal-first workflow, practical shortcuts, and a system you can explore and customize.</p><div class="feature-foot">SHELL / WORKFLOW <span>↗</span></div>
+        </article>
+        <article class="feature-card feature-ai">
+          <div class="ai-orb"><span>HEX</span></div><div class="feature-number">05</div><h3>Your machine. Your AI.</h3><p>HEX AI is designed to chat with a model running locally on your computer. No cloud account is required for the local model workflow.</p><div class="feature-foot">LOCAL AI / SUPER + K <span>↗</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="desktop-section section-pad" id="desktop">
+      <div class="section-kicker">02 / THE EXPERIENCE</div>
+      <div class="desktop-heading"><h2>A workspace<br>that feels <span class="gradient-text">alive.</span></h2><p>Explore the desktop, open a terminal, move between workspaces, and make the environment your own.</p></div>
+      <div class="desktop-stage">
+        <div class="desktop-glow"></div>
+        <div class="desktop-window">
+          <div class="window-bar"><div class="window-dots"><i></i><i></i><i></i></div><span>hex@system ~</span><span class="window-status">● ONLINE</span></div>
+          <div class="terminal-content">
+            <div class="terminal-side"><div class="side-mark">H<span>×</span></div><div class="side-item active">⌂</div><div class="side-item">▤</div><div class="side-item">⌘</div><div class="side-item">◈</div><div class="side-bottom">⚙</div></div>
+            <div class="terminal-main">
+              <div class="terminal-topline"><span>TERMINAL — ZSH</span><span>WORKSPACE 01</span></div>
+              <div class="terminal-lines">
+                <p><span class="prompt">hex@hexos</span> <span class="path">~</span> <span class="symbol">❯</span> fastfetch</p>
+                <div class="fastfetch"><pre>  /\_/\\
+ ( o.o )    <b>HEX OS</b>
+  > ^ <     <span>Linux · x86_64</span></pre><div class="fetch-info"><b>HEX OS</b><span>──────────────</span><small>OS&nbsp;&nbsp;&nbsp;&nbsp; Arch Linux</small><small>WM&nbsp;&nbsp;&nbsp;&nbsp; Hyprland</small><small>Shell&nbsp; zsh</small><small>Theme&nbsp; HEX Dark</small><small>Kernel Linux</small></div></div>
+                <p><span class="prompt">hex@hexos</span> <span class="path">~</span> <span class="symbol">❯</span> <span class="typed">echo "make something great"</span></p>
+                <p class="output">make something great</p>
+                <p><span class="prompt">hex@hexos</span> <span class="path">~</span> <span class="symbol">❯</span> <span class="cursor"></span></p>
+              </div>
+              <div class="terminal-footer"><span>UTF-8</span><span>zsh</span><span>100%</span></div>
+            </div>
+          </div>
+          <div class="dock"><div class="dock-app app-hex">H</div><div class="dock-app">⌘</div><div class="dock-app">▣</div><div class="dock-app">◉</div><div class="dock-app">▤</div><div class="dock-divider"></div><div class="dock-app">⚙</div></div>
+        </div>
+        <div class="stage-caption"><span>FIG 01. — A GLIMPSE INTO HEX</span><span>DESKTOP PREVIEW / CONCEPTUAL UI</span></div>
+      </div>
+      <div class="shortcut-row"><div><span class="mono-note">BUILT AROUND YOUR FLOW</span><h3>Shortcuts that<br>stay out of your way.</h3></div>
+        <div class="shortcut-list"><div><span>Open terminal</span><kbd>SUPER</kbd><b>+</b><kbd>ENTER</kbd></div><div><span>App launcher</span><kbd>SUPER</kbd><b>+</b><kbd>SPACE</kbd></div><div><span>File manager</span><kbd>SUPER</kbd><b>+</b><kbd>E</kbd></div><div><span>HEX AI</span><kbd>SUPER</kbd><b>+</b><kbd>K</kbd></div><div><span>Install HEX OS</span><kbd>SUPER</kbd><b>+</b><kbd>I</kbd></div></div>
+      </div>
+    </section>
+
+    <section class="download-section section-pad" id="download">
+      <div class="download-bg-grid"></div><div class="section-kicker">03 / TAKE IT FOR A SPIN</div>
+      <div class="download-content"><div class="download-mark"><img src="assets/hex-mark.png" alt="HEX OS emblem"></div>
+        <div class="download-copy"><div class="eyebrow"><span class="live-dot"></span> THE CURRENT BUILD</div><h2>Ready when<br><span class="gradient-text">you are.</span></h2><p>Get the bootable ISO, try HEX OS in a virtual machine, and see what you can make.</p>
+          <div class="download-actions"><a class="button button-primary" id="iso-download" href="https://github.com/Techman-cyber/Hex/releases/latest" target="_blank" rel="noreferrer">Get HEX OS <span>↓</span></a><a class="button button-ghost" href="https://github.com/Techman-cyber/Hex/releases" target="_blank" rel="noreferrer">All releases ↗</a></div>
+          <div class="download-details"><span id="release-version">LATEST RELEASE</span><span> x86_64 ISO</span><span>SHA256 CHECKSUM</span></div>
+          <p class="download-note" id="release-note">The latest ISO and checksum are available from GitHub Releases.</p>
+        </div>
+      </div>
+      <div class="install-strip" id="install"><div><span class="mono-note">FIRST BOOT?</span><h3>Start in a safe space.</h3><p>We recommend testing the ISO in VirtualBox or QEMU before installing it on physical hardware.</p></div><div class="install-steps"><div><b>01</b><span>Download the ISO</span></div><div><b>02</b><span>Boot a virtual machine</span></div><div><b>03</b><span>Explore HEX OS</span></div></div></div>
+    </section>
+
+    <section class="closing section-pad"><div class="closing-line"></div><span class="section-kicker">04 / BUILT IN THE OPEN</span><h2>Curious minds<br><span class="muted">make better systems.</span></h2><p>HEX OS is an independent open-source project. Explore the code, follow development, or help shape what comes next.</p><a class="button button-primary" href="https://github.com/Techman-cyber/Hex" target="_blank" rel="noreferrer">Explore the repository ↗</a></section>
+  </main>
+
+  <footer><a class="brand" href="#top"><span class="brand-icon"><img src="assets/hex-mark.png" alt=""></span><span>HEX<span class="brand-dim">/</span>OS</span></a><span>AN INDEPENDENT LINUX PROJECT</span><div><a href="https://github.com/Techman-cyber/Hex">GITHUB</a><a href="https://github.com/Techman-cyber/Hex/releases">RELEASES</a><a href="#top">BACK TO TOP ↑</a></div><small>© <span id="year"></span> HEX OS. Built in the open.</small></footer>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
