@@ -1,117 +1,100 @@
-const year = document.querySelector("#year");
-year.textContent = new Date().getFullYear();
+(() => {
+  const OS_REPO = "Techman-cyber/Hex-OS";
+  const RELEASES_API = `https://api.github.com/repos/${OS_REPO}/releases/latest`;
+  const RELEASES_PAGE = `https://github.com/${OS_REPO}/releases`;
+  const downloadButton = document.getElementById("downloadButton");
+  const releaseText = document.getElementById("releaseText");
+  const releaseWarning = document.getElementById("releaseWarning");
 
-const menu = document.querySelector(".menu-toggle");
-const nav = document.querySelector(".nav-links");
-menu?.addEventListener("click", () => nav.classList.toggle("open"));
-nav?.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
+  // Always resolve downloads from the OS repository, never the website repository.
+  async function loadLatestRelease() {
+    try {
+      const response = await fetch(RELEASES_API, {
+        headers: { "Accept": "application/vnd.github+json" }
+      });
+      if (!response.ok) throw new Error(`GitHub API returned ${response.status}`);
+      const release = await response.json();
+      const assets = Array.isArray(release.assets) ? release.assets : [];
+      const iso = assets.find(asset => /\.iso$/i.test(asset.name));
+      const checksum = assets.find(asset => /sha256|checksum/i.test(asset.name));
 
-async function loadLatestRelease() {
-  const version = document.querySelector("#release-version");
-  const button = document.querySelector("#iso-download");
-  const note = document.querySelector("#release-note");
-  try {
-    const response = await fetch("https://api.github.com/repos/Techman-cyber/Hex/releases/latest", {
-      headers: { Accept: "application/vnd.github+json" }
-    });
-    if (!response.ok) throw new Error("No published release found yet");
-    const release = await response.json();
-    const iso = (release.assets || []).find(asset => asset.name.toLowerCase().endsWith(".iso"));
-    const sums = (release.assets || []).find(asset => asset.name.toLowerCase().includes("sha256"));
-    version.textContent = (release.tag_name || "LATEST").toUpperCase();
-    if (iso) {
-      button.href = iso.browser_download_url;
-      button.setAttribute("download", iso.name);
-      button.innerHTML = 'Download ISO <span>↓</span>';
-      note.textContent = `${iso.name} · ${(iso.size / (1024 ** 3)).toFixed(2)} GB${sums ? " · SHA256 checksum available" : ""}`;
-    } else {
-      note.textContent = "A release exists, but no ISO asset was found. Check the release assets.";
+      if (!iso) throw new Error("No ISO asset found in latest release");
+
+      downloadButton.href = iso.browser_download_url;
+      downloadButton.setAttribute("download", iso.name);
+      downloadButton.innerHTML = `Download ${escapeHTML(iso.name)} <span>↓</span>`;
+      releaseText.textContent = `${release.tag_name || "Latest release"} · ${(iso.size / (1024 ** 3)).toFixed(2)} GB`;
+      releaseWarning.hidden = true;
+
+      const card = document.querySelector(".checksum small");
+      if (card && checksum) {
+        card.textContent = `Checksum file available: ${checksum.name}. Verify the ISO before installing.`;
+      }
+      const releasesLink = document.querySelector(".card-release-link");
+      if (releasesLink) releasesLink.href = release.html_url || RELEASES_PAGE;
+    } catch (error) {
+      downloadButton.href = RELEASES_PAGE;
+      downloadButton.removeAttribute("download");
+      downloadButton.innerHTML = `View OS releases <span>↗</span>`;
+      releaseText.textContent = "Release information unavailable";
+      releaseWarning.hidden = false;
+      console.info("HEX release lookup:", error.message);
     }
-  } catch (error) {
-    version.textContent = "RELEASES";
-    note.textContent = "No published latest release detected yet. Open GitHub Releases to find the current ISO.";
-    button.href = "https://github.com/Techman-cyber/Hex/releases";
-    button.innerHTML = 'View downloads <span>↗</span>';
   }
-}
-loadLatestRelease();
 
-const sceneHost = document.querySelector("#scene");
-if (sceneHost && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  import("three").then(THREE => {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-    camera.position.set(0, 0, 7.5);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    sceneHost.appendChild(renderer.domElement);
+  function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, c => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    }[c]));
+  }
 
-    const group = new THREE.Group();
-    scene.add(group);
-    const material = new THREE.MeshPhysicalMaterial({
-      color: 0xa99aff, metalness: 0.72, roughness: 0.22,
-      clearcoat: 0.8, clearcoatRoughness: 0.15,
-      emissive: 0x24134c, emissiveIntensity: 0.24
+  loadLatestRelease();
+
+  const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.getElementById("navLinks");
+  menuToggle?.addEventListener("click", () => navLinks.classList.toggle("open"));
+  navLinks?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => navLinks.classList.remove("open")));
+
+  const progress = document.getElementById("progress");
+  const updateProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+  };
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  updateProgress();
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
     });
-    const edgeMat = new THREE.MeshBasicMaterial({ color: 0x9f8aff, transparent: true, opacity: 0.6 });
-    const shape = new THREE.Shape();
-    const pts = [];
-    for (let i=0;i<6;i++) {
-      const a = Math.PI/3*i - Math.PI/6;
-      pts.push(new THREE.Vector2(Math.cos(a)*1.45, Math.sin(a)*1.45));
-    }
-    shape.moveTo(pts[0].x, pts[0].y);
-    pts.slice(1).forEach(p => shape.lineTo(p.x,p.y));
-    shape.closePath();
-    const hole = new THREE.Path();
-    for (let i=0;i<6;i++) {
-      const a = Math.PI/3*i - Math.PI/6;
-      const x=Math.cos(a)*1.02,y=Math.sin(a)*1.02;
-      if(i===0) hole.moveTo(x,y); else hole.lineTo(x,y);
-    }
-    hole.closePath(); shape.holes.push(hole);
-    const geometry = new THREE.ExtrudeGeometry(shape,{depth:.32,bevelEnabled:true,bevelSegments:4,steps:1,bevelSize:.07,bevelThickness:.07});
-    const hex = new THREE.Mesh(geometry, material);
-    hex.position.z=-.16;
-    group.add(hex);
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
-    // A minimal split H mark, custom geometry rather than a copied platform logo.
-    const barMat = new THREE.MeshPhysicalMaterial({color:0xe7e1ff,metalness:.62,roughness:.24,clearcoat:.7});
-    function block(w,h,d,x,y,z,mat=barMat) {
-      const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
-      mesh.position.set(x,y,z); group.add(mesh);
-      return mesh;
-    }
-    // Terminal chevron and underscore inside the hex frame.
-    const chevron = new THREE.Shape();
-    chevron.moveTo(-.38,.32); chevron.lineTo(-.08,.05); chevron.lineTo(-.38,-.22);
-    const chevronGeo = new THREE.ExtrudeGeometry(chevron,{depth:.10,bevelEnabled:true,bevelThickness:.025,bevelSize:.02,bevelSegments:2});
-    const chevronMesh = new THREE.Mesh(chevronGeo,barMat); chevronMesh.position.z=.24; group.add(chevronMesh);
-    block(.38,.09,.13,.28,-.19,.29);
+  // Gentle pointer parallax on the 3D emblem.
+  const stage = document.getElementById("hexStage");
+  const art = document.querySelector(".hero-art");
+  if (stage && art && matchMedia("(pointer:fine)").matches) {
+    art.addEventListener("pointermove", event => {
+      const rect = art.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - .5;
+      const y = (event.clientY - rect.top) / rect.height - .5;
+      stage.style.transform = `rotateY(${x * 9}deg) rotateX(${-y * 7}deg)`;
+    });
+    art.addEventListener("pointerleave", () => stage.style.transform = "");
+  }
 
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(2.0,.008,8,160),new THREE.MeshBasicMaterial({color:0x73dce8,transparent:true,opacity:.38}));
-    ring.rotation.set(.95,.15,.3); group.add(ring);
-    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.18,.006,8,160),new THREE.MeshBasicMaterial({color:0xa38bff,transparent:true,opacity:.22}));
-    ring2.rotation.set(1.35,.35,-.2); group.add(ring2);
-
-    const stars = new THREE.BufferGeometry();
-    const positions=[];
-    for(let i=0;i<500;i++){positions.push((Math.random()-.5)*11,(Math.random()-.5)*8,(Math.random()-.5)*5-2);}
-    stars.setAttribute("position",new THREE.Float32BufferAttribute(positions,3));
-    const points = new THREE.Points(stars,new THREE.PointsMaterial({color:0xaaa0d8,size:.012,transparent:true,opacity:.55}));
-    scene.add(points);
-    scene.add(new THREE.AmbientLight(0xaaaaff,1.4));
-    const key=new THREE.PointLight(0x9b7cff,40,15);key.position.set(3,3,4);scene.add(key);
-    const fill=new THREE.PointLight(0x5bdce8,25,12);fill.position.set(-3,-2,2);scene.add(fill);
-
-    const resize=()=>{const w=sceneHost.clientWidth,h=sceneHost.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();};
-    resize(); new ResizeObserver(resize).observe(sceneHost);
-    let mx=0,my=0,tx=0,ty=0;
-    sceneHost.addEventListener("pointermove",e=>{const r=sceneHost.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5)*.55;ty=((e.clientY-r.top)/r.height-.5)*.4;});
-    const clock=new THREE.Clock();
-    function animate(){requestAnimationFrame(animate);const t=clock.getElapsedTime();mx+=(tx-mx)*.035;my+=(ty-my)*.035;group.rotation.y=Math.sin(t*.23)*.22+mx;group.rotation.x=Math.cos(t*.19)*.12+my;group.rotation.z=Math.sin(t*.15)*.035;ring.rotation.z+=.0012;ring2.rotation.z-=.0007;points.rotation.y=t*.012;renderer.render(scene,camera);}
-    animate();
-  }).catch(() => { sceneHost.classList.add("scene-fallback"); });
-}
+  // Subtle depth movement for the desktop mockup.
+  const preview = document.getElementById("desktopWindow");
+  if (preview && matchMedia("(pointer:fine)").matches) {
+    preview.addEventListener("pointermove", event => {
+      const r = preview.getBoundingClientRect();
+      const x = (event.clientX - r.left) / r.width - .5;
+      const y = (event.clientY - r.top) / r.height - .5;
+      preview.style.transform = `perspective(1200px) rotateX(${2 - y * 3}deg) rotateY(${x * 3}deg)`;
+    });
+    preview.addEventListener("pointerleave", () => preview.style.transform = "");
+  }
+})();

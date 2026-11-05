@@ -1,24 +1,40 @@
-# HEX OS website
+# HEX OS Website
 
-A responsive, single-page landing site for HEX OS with an interactive Three.js hero scene.
+Premium, responsive landing page for HEX OS.
+
+## Repository split
+
+- **Website source:** `Techman-cyber/Hex`
+- **Operating system source + releases:** `Techman-cyber/Hex-OS`
+
+The download button calls the GitHub Releases API for **`Techman-cyber/Hex-OS`** and downloads the `.iso` asset from its latest published release. It never checks this website repository for OS downloads.
 
 ## Run locally
-No build step is required. Open `index.html` in a local web server (recommended because ES modules and the GitHub API are used).
 
-For example, with Python:
+Use Python:
+
 ```bash
 python -m http.server 8000
 ```
-Then visit http://localhost:8000.
+
+Open http://localhost:8000.
+
+Or use VS Code Live Server.
 
 ## Deploy
-Upload the contents of this folder to GitHub Pages, Vercel, Netlify, or any static host.
 
-## Downloads
-The download section checks the GitHub Releases API for the latest published release and links directly to the first `.iso` asset it finds. If no release exists yet, it falls back to the repository's Releases page.
+Publish the contents of this folder using GitHub Pages, Vercel, Netlify or another static host. Keep `index.html`, `style.css`, `script.js` and `assets/` together.
+
+## Release behavior
+
+- Finds the latest published release from `Techman-cyber/Hex-OS`.
+- Selects the first `.iso` asset.
+- Shows the release tag and ISO size.
+- Looks for a SHA256/checksum asset and updates the verification note.
+- If no release or ISO is available, the button safely links to the OS Releases page.
+
+GitHub's public API has an unauthenticated rate limit. The site gracefully falls back to the Releases page if the API is unavailable.
 
 ## Notes
-- The 3D hero uses Three.js from jsDelivr CDN.
-- Fonts load from Google Fonts.
-- The desktop preview is an illustrative concept, not a screenshot of a live HEX OS session.
-- Feature descriptions are based on the HEX OS repository README. Verify release details and hardware requirements before publishing.
+
+The desktop shown on the page is an original conceptual visual, not a screenshot of a running HEX OS build. Update it with real screenshots when available.
