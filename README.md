@@ -42,4 +42,4 @@ The desktop shown on the page is an original conceptual visual, not a screenshot
 
 ## Download button
 
-The download section has a single download button. Clicking it starts the download of the `.iso` from the latest published release of `Techman-cyber/Hex-OS` automatically.
+The download section has a single download button. Clicking it starts the download of the `.iso` from the latest published release of `Techman-cyber/Hex` automatically.

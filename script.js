@@ -1,12 +1,13 @@
 (() => {
-  const OS_REPO = "Techman-cyber/Hex-OS";
+  const OS_REPO = "Techman-cyber/Hex";
+  const FALLBACK_ISO = "https://github.com/Techman-cyber/Hex/releases/download/v0.1.0/hex-os-2026.11.05-x86_64.iso";
   const RELEASES_API = `https://api.github.com/repos/${OS_REPO}/releases/latest`;
   const RELEASES_PAGE = `https://github.com/${OS_REPO}/releases`;
   const downloadButton = document.getElementById("downloadButton");
   const releaseText = document.getElementById("releaseText");
   const releaseWarning = document.getElementById("releaseWarning");
 
-  // Always resolve downloads from the OS repository, never the website repository.
+  // Downloads come from the Techman-cyber/Hex releases.
   async function loadLatestRelease() {
     try {
       const response = await fetch(RELEASES_API, {
@@ -33,11 +34,11 @@
       const releasesLink = document.querySelector(".card-release-link");
       if (releasesLink) releasesLink.href = release.html_url || RELEASES_PAGE;
     } catch (error) {
-      downloadButton.href = RELEASES_PAGE;
-      downloadButton.removeAttribute("download");
-      downloadButton.innerHTML = `View OS releases <span>↗</span>`;
-      releaseText.textContent = "Release information unavailable";
-      releaseWarning.hidden = false;
+      // Lookup failed (for example GitHub rate limit): the button still downloads the v0.1.0 ISO.
+      downloadButton.href = FALLBACK_ISO;
+      downloadButton.innerHTML = `Download HEX OS <span>↓</span>`;
+      releaseText.textContent = "v0.1.0";
+      releaseWarning.hidden = true;
       console.info("HEX release lookup:", error.message);
     }
   }
@@ -48,17 +49,7 @@
     }[c]));
   }
 
-  const releaseReady = loadLatestRelease();
-
-  // One button: a click starts the ISO download right away.
-  // If the release lookup is still running, wait for it, then go straight to the file.
-  downloadButton.addEventListener("click", async event => {
-    if (downloadButton.getAttribute("href") !== "#") return; // already resolved: the link downloads normally
-    event.preventDefault();
-    await releaseReady;
-    const target = downloadButton.getAttribute("href");
-    if (target && target !== "#") window.location.href = target;
-  });
+  loadLatestRelease();
 
   const menuToggle = document.getElementById("menuToggle");
   const navLinks = document.getElementById("navLinks");
