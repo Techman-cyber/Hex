@@ -48,7 +48,17 @@
     }[c]));
   }
 
-  loadLatestRelease();
+  const releaseReady = loadLatestRelease();
+
+  // One button: a click starts the ISO download right away.
+  // If the release lookup is still running, wait for it, then go straight to the file.
+  downloadButton.addEventListener("click", async event => {
+    if (downloadButton.getAttribute("href") !== "#") return; // already resolved: the link downloads normally
+    event.preventDefault();
+    await releaseReady;
+    const target = downloadButton.getAttribute("href");
+    if (target && target !== "#") window.location.href = target;
+  });
 
   const menuToggle = document.getElementById("menuToggle");
   const navLinks = document.getElementById("navLinks");

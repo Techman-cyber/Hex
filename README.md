@@ -40,6 +40,6 @@ GitHub's public API has an unauthenticated rate limit. The site gracefully falls
 The desktop shown on the page is an original conceptual visual, not a screenshot of a running HEX OS build. Update it with real screenshots when available.
 
 
-## Fixed v0.1.0 release link
+## Download button
 
-The download section also includes a dedicated **Download v0.1.0** button linking directly to the requested release page: https://github.com/Techman-cyber/Hex/releases/tag/v0.1.0. The separate latest-ISO button continues to resolve the latest ISO from the OS repository (`Techman-cyber/Hex-OS`).
+The download section has a single download button. Clicking it starts the download of the `.iso` from the latest published release of `Techman-cyber/Hex-OS` automatically.
