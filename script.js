@@ -1,13 +1,14 @@
 (() => {
-  const OS_REPO = "Techman-cyber/Hex";
-  const FALLBACK_ISO = "https://github.com/Techman-cyber/Hex/releases/download/v0.1.0/hex-os-2026.11.05-x86_64.iso";
+  // To download from a different repo, change OS_REPO only. The build publishes a file named hex-os.iso.
+  const OS_REPO = "Techman-cyber/Hex-OS";
+  const FALLBACK_ISO = `https://github.com/${OS_REPO}/releases/latest/download/hex-os.iso`;
   const RELEASES_API = `https://api.github.com/repos/${OS_REPO}/releases/latest`;
   const RELEASES_PAGE = `https://github.com/${OS_REPO}/releases`;
   const downloadButton = document.getElementById("downloadButton");
   const releaseText = document.getElementById("releaseText");
   const releaseWarning = document.getElementById("releaseWarning");
 
-  // Downloads come from the Techman-cyber/Hex releases.
+  // Downloads come from the latest release of OS_REPO.
   async function loadLatestRelease() {
     try {
       const response = await fetch(RELEASES_API, {
@@ -34,10 +35,10 @@
       const releasesLink = document.querySelector(".card-release-link");
       if (releasesLink) releasesLink.href = release.html_url || RELEASES_PAGE;
     } catch (error) {
-      // Lookup failed (for example GitHub rate limit): the button still downloads the v0.1.0 ISO.
+      // Lookup failed (for example GitHub rate limit): the button still downloads the latest hex-os.iso.
       downloadButton.href = FALLBACK_ISO;
       downloadButton.innerHTML = `Download HEX OS <span>↓</span>`;
-      releaseText.textContent = "v0.1.0";
+      releaseText.textContent = "Latest release";
       releaseWarning.hidden = true;
       console.info("HEX release lookup:", error.message);
     }
