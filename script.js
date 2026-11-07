@@ -1,7 +1,7 @@
 (() => {
   // To download from a different repo, change OS_REPO only. The build publishes a file named hex-os.iso.
-  const OS_REPO = "Techman-cyber/Hex-OS";
-  const FALLBACK_ISO = `https://github.com/${OS_REPO}/releases/latest/download/hex-os.iso`;
+  const OS_REPO = "Techman-cyber/Hex";
+  const FALLBACK_ISO = `https://github.com/${OS_REPO}/releases/latest/download/hex.iso`;
   const RELEASES_API = `https://api.github.com/repos/${OS_REPO}/releases/latest`;
   const RELEASES_PAGE = `https://github.com/${OS_REPO}/releases`;
   const downloadButton = document.getElementById("downloadButton");
